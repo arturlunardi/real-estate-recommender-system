@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <title>Real Estate Recommender</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+
+</head>
+
+<body>
+    <main id="main">
+        <a class="btn" href="{{ url_for('main_page') }}">Home
+        </a>
+        <!-- ======= Recomendation Table Details ======= -->
+        <section id="recomendation-details" class="recomendation-details">
+            <div class="recomendation-info">
+                <h1>Real Estate Recommender</h1>
+                <h6>The last update from the API was in {{last_update | round(3)}} minutes.</h6>
+                <h2>Original Property</h2>
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Typology</th>
+                        <th>Bedrooms</th>
+                        <th>Bathrooms</th>
+                        <th>Parking Spaces</th>
+                        <th>Rent Value</th>
+                        <th>Neighbor</th>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ original_property['codigo'] }}</strong></td>
+                        <td>{{ original_property['subtipo'] }}</td>
+                        <td>{{ original_property['dormitorios'] | int }}</td>
+                        <td>{{ original_property['banheiros'] | int }}</td>
+                        <td>{{ original_property['garagens'] | int }}</td>
+                        <td>{{ "R$ " + original_property['valor_locacao'] | string }}</td>
+                        <td>{{ original_property['endereco_bairro'] }}</td>
+                    </tr>
+                </table><br>
+                <h2>Recommendations </h2>
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Typology</th>
+                        <th>Bedrooms</th>
+                        <th>Bathrooms</th>
+                        <th>Parking Spaces</th>
+                        <th>Rent Value</th>
+                        <th>Neighbor</th>
+                        <th>Score</th>
+                    </tr>
+                    {% for key, value in df_dict.iterrows() %}
+                    <tr>
+                        <td><strong>{{ value['codigo'] }}</td></strong>
+                        <td>{{ value['subtipo'] }}</td>
+                        <td>{{ value['dormitorios'] | int }}</td>
+                        <td>{{ value['banheiros'] | int }}</td>
+                        <td>{{ value['garagens'] | int }}</td>
+                        <td>{{ "R$ " + value['valor_locacao'] | string }}</td>
+                        <td>{{ value['endereco_bairro'] }}</td>
+                        <td>{{ value['score'] | round(3) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="search-by-id">
+                <div class="input is-rounded is-location py-0 flex items-center flex-row">
+                    <form method="post">
+                        <input type="text" name="predict" id="by_code" value=""
+                            class="block appearance-none w-full text-gray-700 leading-tight focus:outline-none"
+                            required="required" placeholder="Submit the Id">
+                        <input type="submit" name="commit" value="Search" class="button is-rounded"
+                            data-disable-with="Search">
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section id="section-footer">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 offset-md-4">
+                        <p>Created by Artur Lunardi Di Fante</p>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-4 offset-md-4">
+                        <a class="fa fa-linkedin" style="font-size:24px"
+                            href="https://www.linkedin.com/in/artur-lunardi-di-fante-393611194/" target="_blank"></a>
+                        <a class="fa fa-github" style="font-size:24px" href="https://github.com/arturlunardi"
+                            target="_blank"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

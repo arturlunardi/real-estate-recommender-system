@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <title>Real Estate Recommender</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+
+  <!-- Add icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+
+</head>
+
+<body>
+  <main id="main">
+    <!-- ======= Project Details Section ======= -->
+    <section id="project-details" class="project-details">
+      <div class="project-info">
+        <h2>Real Estate Recommender</h2>
+        <ul>
+          <li><strong>Category</strong>: Recommender System</li>
+          <li><strong>Date of the project</strong>: 20, February, 2021.</li>
+        </ul>
+      </div>
+      <div class="project-description">
+        <h2>Content Based Recommender System</h2>
+        <ul>
+          <li>These project was built to generate recommendations of propertys based on their characteristics or
+            atributes.<br></li>
+          <li>Content Based Filtering are a type of recommender system that uses item features to recommend other items
+            similar to what the user likes, based on their previous actions or explicit feedback.<br></li>
+          <li>One of the advantages of these system it is that it is possible to generate recommendations without have a
+            historic of the behavior of another users.</li>
+        </ul>
+      </div>
+      <div class="ids">
+        <h2>First {{ids|length}} Id's available</h2>
+        <ul>
+          {% for id in ids %}
+          <li>{{ id }} | </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="search-by-id">
+        <div class="input is-rounded is-location py-0 flex items-center flex-row">
+          <form method="post">
+            <input type="text" name="predict" id="by_code" value=""
+              class="block appearance-none w-full text-gray-700 leading-tight focus:outline-none" required="required"
+              placeholder="Submit the Id">
+            <input type="submit" name="commit" value="Search" class="button is-rounded" data-disable-with="Search">
+          </form>
+        </div>
+      </div>
+    </section>
+    <section id="section-footer">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 offset-md-4">
+            <p>Created by Artur Lunardi Di Fante</p>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-md-4 offset-md-4">
+            <a class="fa fa-linkedin" style="font-size:24px"
+              href="https://www.linkedin.com/in/artur-lunardi-di-fante-393611194/" target="_blank"></a>
+            <a class="fa fa-github" style="font-size:24px" href="https://github.com/arturlunardi"
+              target="_blank"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+
+</html>

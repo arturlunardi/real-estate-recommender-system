@@ -1,0 +1,13 @@
+<head>
+    <!-- <link href="..\static\styles\style.css" rel="stylesheet"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/404.css') }}">
+</head>
+<div class="noise"></div>
+<div class="overlay"></div>
+<div class="terminal">
+    <h1>Error <span class="errorcode">404</span></h1>
+    <p class="output">The page you are looking for might have been removed, doesn't exist, had its name changed or is temporarily
+        unavailable.</p>
+    <p class="output">Please <a href="{{ url_for('main_page') }}">return to the homepage</a>.</p>
+    <p class="output">Good luck.</p>
+</div>
