@@ -25,7 +25,7 @@ def get_api(url):
 
 def get_predictions(id_):
 
-    conteudo = get_api("https://api.jetimob.app/webservice/d1tNx7SSqrtlED6UgEENtr7P1ckQkj8hLLfsq2bU/imoveis?v=v2")
+    conteudo = get_api("API-key here")
 
     predictions = recommend(id_, conteudo)
 
