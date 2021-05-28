@@ -11,11 +11,17 @@ STATIC_DIR = os.path.abspath('./static')
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
 
+@app.before_first_request
+def run_first_model():
+    run_backend.get_api()
+    return None
+
+
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
     if request.method == 'GET':
         # Get the first x id's to show on the main page
-        ids = run_backend.get_ids(10)
+        ids = run_backend.get_ids(20)
         return render_template('index.html', ids=ids)
     else:
         # redirect for /predict - button
@@ -27,7 +33,7 @@ def main_page():
 def predict_api():
     if request.method == 'GET':
         imovel_id = request.args.get("imovel_id", default=None)
-    else:
+    elif request.method == 'POST':
         # redirect for /predict - button
         return redirect(url_for("predict_api",
                                 imovel_id=request.form.get('predict')))
@@ -47,4 +53,4 @@ def predict_api():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')

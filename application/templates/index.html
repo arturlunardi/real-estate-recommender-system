@@ -7,7 +7,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
+  <link href="{{ url_for('static',filename='styles/favicon.ico') }}" rel="icon">
 
   <!-- Add icon library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,8 +36,8 @@
       <div class="project-description">
         <h2>Content Based Recommender System</h2>
         <ul>
-          <li>These project was built to generate recommendations of propertys based on their characteristics or
-            atributes.<br></li>
+          <li>These recommender system was built to generate recommendations of properties based on their
+            characteristics or atributes.<br></li>
           <li>Content Based Filtering are a type of recommender system that uses item features to recommend other items
             similar to what the user likes, based on their previous actions or explicit feedback.<br></li>
           <li>One of the advantages of these system it is that it is possible to generate recommendations without have a
@@ -55,7 +55,7 @@
       <div class="search-by-id">
         <div class="input is-rounded is-location py-0 flex items-center flex-row">
           <form method="post">
-            <input type="text" name="predict" id="by_code" value=""
+            <input type="number" name="predict" id="by_code" value=""
               class="block appearance-none w-full text-gray-700 leading-tight focus:outline-none" required="required"
               placeholder="Submit the Id">
             <input type="submit" name="commit" value="Search" class="button is-rounded" data-disable-with="Search">

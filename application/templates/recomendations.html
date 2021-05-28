@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="{{ url_for('static',filename='styles/favicon.ico') }}" rel="icon">
 
     <!-- Add icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -40,16 +40,16 @@
                         <th>Bathrooms</th>
                         <th>Parking Spaces</th>
                         <th>Rent Value</th>
-                        <th>Neighbor</th>
+                        <th>Neighborhood</th>
                     </tr>
                     <tr>
-                        <td><strong>{{ original_property['codigo'] }}</strong></td>
-                        <td>{{ original_property['subtipo'] }}</td>
-                        <td>{{ original_property['dormitorios'] | int }}</td>
-                        <td>{{ original_property['banheiros'] | int }}</td>
-                        <td>{{ original_property['garagens'] | int }}</td>
-                        <td>{{ "R$ " + original_property['valor_locacao'] | string }}</td>
-                        <td>{{ original_property['endereco_bairro'] }}</td>
+                        <td><strong>{{ original_property['Codigo'] }}</strong></td>
+                        <td>{{ original_property['Categoria'] }}</td>
+                        <td>{{ original_property['Dormitorios'] | int }}</td>
+                        <td>{{ original_property['BanheiroSocialQtd'] | int }}</td>
+                        <td>{{ original_property['Vagas'] | int }}</td>
+                        <td>{{ "R$ " + original_property['ValorLocacao'] | string }}</td>
+                        <td>{{ original_property['Bairro'] }}</td>
                     </tr>
                 </table><br>
                 <h2>Recommendations </h2>
@@ -61,19 +61,19 @@
                         <th>Bathrooms</th>
                         <th>Parking Spaces</th>
                         <th>Rent Value</th>
-                        <th>Neighbor</th>
+                        <th>Neighborhood</th>
                         <th>Score</th>
                     </tr>
                     {% for key, value in df_dict.iterrows() %}
                     <tr>
-                        <td><strong>{{ value['codigo'] }}</td></strong>
-                        <td>{{ value['subtipo'] }}</td>
-                        <td>{{ value['dormitorios'] | int }}</td>
-                        <td>{{ value['banheiros'] | int }}</td>
-                        <td>{{ value['garagens'] | int }}</td>
-                        <td>{{ "R$ " + value['valor_locacao'] | string }}</td>
-                        <td>{{ value['endereco_bairro'] }}</td>
-                        <td>{{ value['score'] | round(3) }}</td>
+                        <td><strong>{{ value['Codigo'] }}</td></strong>
+                        <td>{{ value['Categoria'] }}</td>
+                        <td>{{ value['Dormitorios'] | int }}</td>
+                        <td>{{ value['BanheiroSocialQtd'] | int }}</td>
+                        <td>{{ value['Vagas'] | int }}</td>
+                        <td>{{ "R$ " + value['ValorLocacao'] | string }}</td>
+                        <td>{{ value['Bairro'] }}</td>
+                        <td>{{ value['Score'] }}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -81,7 +81,7 @@
             <div class="search-by-id">
                 <div class="input is-rounded is-location py-0 flex items-center flex-row">
                     <form method="post">
-                        <input type="text" name="predict" id="by_code" value=""
+                        <input type="number" name="predict" id="by_code" value=""
                             class="block appearance-none w-full text-gray-700 leading-tight focus:outline-none"
                             required="required" placeholder="Submit the Id">
                         <input type="submit" name="commit" value="Search" class="button is-rounded"

@@ -4,29 +4,43 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import hstack
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+import numpy as np
+
+
+def number_columns(data):
+    df_imoveis = data.copy()
+    numeric_columns = ["Codigo", "Dormitorios", "Suites",
+                       "BanheiroSocialQtd", "Vagas", "AreaPrivativa", "ValorLocacao"]
+    for column in numeric_columns:
+        df_imoveis[column] = df_imoveis[column].replace(
+            '', np.nan).astype(float)
+
+    return df_imoveis
 
 
 def clean_data(data):
     """Return the a copy of the original dataframe with the
     columns that are in the model and treated for missing values."""
-    df_imoveis = data.copy()
+    df_imoveis = number_columns(data)
 
-    columns = ['tipo', 'subtipo', 'mobiliado', 'dormitorios',
-               'suites', 'banheiros', 'garagens', 'area_total',
-               'valor_locacao', 'endereco_bairro', 'meta_description',
-               'imovel_comodidades']
+    columns = ['Finalidade', 'Categoria', 'Dormitorios', 'Suites',
+               'BanheiroSocialQtd', 'Vagas', 'AreaPrivativa', 'ValorLocacao',
+               'Bairro', 'Caracteristicas', 'DescricaoWeb']
     df_imoveis = df_imoveis[columns]
 
-    df_imoveis['dormitorios'].fillna(0, inplace=True)
-    df_imoveis['suites'] = df_imoveis.groupby(
-        'subtipo')['suites'].apply(lambda x: x.fillna(x.median()))
-    df_imoveis['suites'].fillna(0, inplace=True)
-    df_imoveis['banheiros'].fillna(0, inplace=True)
-    df_imoveis['area_total'] = df_imoveis.groupby(
-        'subtipo')['area_total'].apply(lambda x: x.fillna(x.mean()))
-    df_imoveis['area_total'].fillna(0, inplace=True)
-    df_imoveis['meta_description'].fillna('', inplace=True)
-    df_imoveis['imovel_comodidades'].fillna('', inplace=True)
+    df_imoveis['Dormitorios'] = df_imoveis.groupby(
+        'Categoria')['Dormitorios'].apply(lambda x: x.fillna(x.median()))
+    df_imoveis['Dormitorios'].fillna(0, inplace=True)
+    df_imoveis['Suites'] = df_imoveis.groupby(
+        'Categoria')['Suites'].apply(lambda x: x.fillna(x.median()))
+    df_imoveis['Suites'].fillna(0, inplace=True)
+    df_imoveis['BanheiroSocialQtd'].fillna(0, inplace=True)
+    df_imoveis['Vagas'].fillna(0, inplace=True)
+    df_imoveis['AreaPrivativa'] = df_imoveis.groupby(
+        'Categoria')['AreaPrivativa'].apply(lambda x: x.fillna(x.mean()))
+    df_imoveis['AreaPrivativa'].fillna(0, inplace=True)
+    df_imoveis['Caracteristicas'].fillna('', inplace=True)
+    df_imoveis['DescricaoWeb'].fillna('', inplace=True)
 
     return df_imoveis
 
@@ -37,11 +51,11 @@ def transform_data(data):
     df_imoveis = clean_data(data)
 
     le = LabelEncoder()
-    categorical_columns = ['tipo', 'subtipo', 'endereco_bairro']
+    categorical_columns = ['Finalidade', 'Categoria', 'Bairro']
     for column in categorical_columns:
         df_imoveis[column] = le.fit_transform(df_imoveis[column])
     sc = StandardScaler()
-    numerical_columns = ['area_total', 'valor_locacao', 'endereco_bairro']
+    numerical_columns = ['AreaPrivativa', 'Bairro']
     df_imoveis[numerical_columns] = sc.fit_transform(
         df_imoveis[numerical_columns])
 
@@ -54,9 +68,9 @@ def stack_data(data):
     The metric that have been chosen it is cosine similarity."""
     df_imoveis = transform_data(data)
 
-    title_metadescription = df_imoveis['meta_description']
-    title_comodidades = df_imoveis['imovel_comodidades']
-    df_imoveis.drop(['meta_description', 'imovel_comodidades'],
+    title_metadescription = df_imoveis['DescricaoWeb']
+    title_comodidades = df_imoveis['Caracteristicas']
+    df_imoveis.drop(['DescricaoWeb', 'Caracteristicas'],
                     axis=1, inplace=True)
     nltk.download('stopwords')
     stopwords = nltk.corpus.stopwords.words('portuguese')
@@ -78,30 +92,30 @@ def recommend(id_, conteudo, quantity_similar_items):
     items in descending order."""
     nearest_neighbor = stack_data(conteudo)
 
-    columns = ['codigo', 'tipo', 'subtipo', 'mobiliado', 'dormitorios',
-               'suites', 'banheiros', 'garagens', 'area_total',
-               'valor_locacao', 'endereco_bairro', 'imovel_comodidades',
-               'score']
+    columns = ['Codigo', 'Finalidade', 'Categoria', 'Mobiliado', 'Dormitorios',
+               'Suites', 'BanheiroSocialQtd', 'Vagas', 'AreaPrivativa',
+               'ValorLocacao', 'Bairro', 'Caracteristicas',
+               'Score']
 
     similar_listing_ids = []
     df_original = conteudo
     df_original.reset_index(drop=True, inplace=True)
     try:
-        idx = df_original.loc[df_original['codigo'] == id_].index[0]
+        idx = df_original.loc[df_original['Codigo'] == id_].index[0]
     except:
         return None, None
     # creating a Series with the similarity scores in descending order
     score_series = pd.Series(
         nearest_neighbor[idx]).sort_values(ascending=False)
-    df_original['score'] = score_series
+    df_original['Score'] = score_series
     # getting the indexes of the most similar listings
     top_indexes = list(score_series.index)
     # populate the list with the ids of the top matching listings
     # checking if the goal of the rent it's the same
     # excluding if the property it is itself
     for i in top_indexes:
-        if df_original['tipo'][idx] == df_original['tipo'][i] \
-                and df_original['codigo'][idx] != df_original['codigo'][i]:
+        if df_original['Finalidade'][idx] == df_original['Finalidade'][i] \
+                and df_original['Codigo'][idx] != df_original['Codigo'][i]:
             similar_listing_ids.append(i)
 
     # return the top similar properties and the original property
